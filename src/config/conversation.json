@@ -1,0 +1,129 @@
+{
+  "steps": [
+    {
+      "id": "start",
+      "message": "Message with photo header",
+      "header": {
+        "photo": "https://camo.githubusercontent.com/3cae61090608b8cbd681f5825ca5ac76af8d8d3ee12024926d51c5480aef5d6c/68747470733a2f2f796176757a63656c696b65722e6769746875622e696f2f73616d706c652d696d616765732f696d6167652d313032312e6a7067"
+      },
+      "options": [
+        {
+          "text": "Header Video",
+          "nextStep": "header-video"
+        },
+        {
+          "text": "Header Document",
+          "nextStep": "header-document"
+        },
+        {
+          "text": "Header Photo",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "header-video",
+      "message": "Message with video header",
+      "header": {
+        "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+      },
+      "options": [
+        {
+          "text": "Header Video",
+          "nextStep": "header-video"
+        },
+        {
+          "text": "Header Document",
+          "nextStep": "header-document"
+        },
+        {
+          "text": "Header Photo",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "header-document",
+      "message": "Message with document header",
+      "header": {
+        "document": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+      },
+      "options": [
+        {
+          "text": "Header Video",
+          "nextStep": "header-video"
+        },
+        {
+          "text": "Header Document",
+          "nextStep": "header-document"
+        },
+        {
+          "text": "Header Photo",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "message": "We offer the following services:",
+      "header": {
+        "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+      },
+      "options": [
+        {
+          "text": "Web Development",
+          "nextStep": "web_dev"
+        },
+        {
+          "text": "Mobile Development",
+          "nextStep": "mobile_dev"
+        },
+        {
+          "text": "Back to start",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "support",
+      "header": {
+        "document": ""
+      },
+      "message": "Please contact us at support@example.com or call +1234567890",
+      "options": [
+        {
+          "text": "Back to start",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "web_dev",
+      "message": "We specialize in modern web development using React, Node.js, and other cutting-edge technologies.",
+      "options": [
+        {
+          "text": "Back to services",
+          "nextStep": "services"
+        },
+        {
+          "text": "Back to start",
+          "nextStep": "start"
+        }
+      ]
+    },
+    {
+      "id": "mobile_dev",
+      "message": "We create native and cross-platform mobile applications using React Native and Flutter.",
+      "options": [
+        {
+          "text": "Back to services",
+          "nextStep": "services"
+        },
+        {
+          "text": "Back to start",
+          "nextStep": "start"
+        }
+      ]
+    }
+  ]
+}
