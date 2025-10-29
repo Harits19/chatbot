@@ -73,7 +73,8 @@
         "method": "GET",
         "url": "https://reqres.in/api/users/2"
       },
-      "message": "Email received {{data.data.email}}"
+      "message": "Email received {{data.data.email}}",
+      "nextStep": "start"
 
     }
   ]

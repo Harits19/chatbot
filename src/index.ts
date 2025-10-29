@@ -11,7 +11,7 @@ bot.onText(/\/start/, (msg: Message) => {
 
   userStates.set(chatId, { currentStep: "start" });
 
-  bot.sendMessage(chatId, startStep.message, createKeyboard(startStep.options));
+  handleNextStep(chatId, startStep);
 });
 
 // Handle all messages
@@ -26,12 +26,12 @@ bot.on("message", async (msg: Message) => {
   if (!currentStep) return;
 
   // Find the selected option
-  const selectedOption = currentStep.options?.find(
-    (option) => option.text === msg.text
-  );
+  const nextStepId =
+    currentStep.options?.find((option) => option.text === msg.text)?.nextStep ??
+    currentStep.nextStep;
 
-  if (selectedOption) {
-    const nextStep = findStep(selectedOption.nextStep);
+  if (nextStepId) {
+    const nextStep = findStep(nextStepId);
 
     if (nextStep) {
       await handleNextStep(chatId, nextStep);

@@ -18,7 +18,7 @@ export function createKeyboard(options?: Option[]) {
   if (!options) return undefined;
   return {
     reply_markup: {
-      keyboard: options.map((option) => [{ text: option.text }]),
+      keyboard: options.map((option) => [{ text: option.text, }]),
       resize_keyboard: true,
       one_time_keyboard: false,
     },
