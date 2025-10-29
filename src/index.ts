@@ -1,83 +1,7 @@
-import TelegramBot, { Message } from "node-telegram-bot-api";
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import axios, { AxiosRequestConfig } from "axios";
+import { Message } from "node-telegram-bot-api";
 
-// Load environment variables
-dotenv.config();
-
-type Option = { text: string; nextStep: string };
-type Step = {
-  id: string;
-  message: string;
-  options: Option[];
-  action: AxiosRequestConfig;
-  header?: {
-    photo?: string;
-    video?: string;
-    document?: string;
-  };
-};
-type Conversation = { steps: Step[] };
-
-// Read conversation flow from JSON
-const conversationConfig: Conversation = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "config", "conversation.json"), "utf8")
-);
-
-// Create a bot instance
-const token = process.env.BOT_TOKEN as string | undefined;
-if (!token) {
-  console.error("BOT_TOKEN is not set in .env");
-  process.exit(1);
-}
-
-const bot = new TelegramBot(token, { polling: true });
-
-// Store user states
-const userStates = new Map<number, { currentStep: string }>();
-
-// Helper function to find step by ID
-function findStep(stepId: string): Step | undefined {
-  return conversationConfig.steps.find((step) => step.id === stepId);
-}
-
-// Helper function to create keyboard markup from options
-function createKeyboard(options: Option[]) {
-  return {
-    reply_markup: {
-      keyboard: options.map((option) => [{ text: option.text }]),
-      resize_keyboard: true,
-      one_time_keyboard: false,
-    },
-  };
-}
-
-async function handleNextStep(chatId: number, nextStep: Step) {
-  const { photo, video, document } = nextStep.header ?? {};
-  const action = nextStep.action;
-
-  try {
-    const response = await axios(action);
-  } catch (error) {}
-
-  userStates.set(chatId, { currentStep: nextStep.id });
-
-  if (photo) {
-    await bot.sendPhoto(chatId, photo);
-  }
-
-  if (video) {
-    await bot.sendVideo(chatId, video);
-  }
-
-  if (document) {
-    await bot.sendDocument(chatId, document);
-  }
-  
-  await bot.sendMessage(chatId, nextStep.message, createKeyboard(nextStep.options));
-}
+import { findStep, handleNextStep } from "./services/chatbot";
+import { bot, createKeyboard, userStates } from "./services/telegram";
 
 // Handle /start command
 bot.onText(/\/start/, (msg: Message) => {
@@ -102,7 +26,7 @@ bot.on("message", async (msg: Message) => {
   if (!currentStep) return;
 
   // Find the selected option
-  const selectedOption = currentStep.options.find(
+  const selectedOption = currentStep.options?.find(
     (option) => option.text === msg.text
   );
 

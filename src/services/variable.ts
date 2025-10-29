@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export function replaceObject(sourceData: object, replaceData: object) {
+export function replaceObject<T>(sourceData: object, replaceData: T) {
   let stringObject = JSON.stringify(replaceData);
   const matches = [...stringObject.matchAll(/{{.*?}}/g)].map((m) => m[0]);
 
@@ -19,5 +19,5 @@ export function replaceObject(sourceData: object, replaceData: object) {
     }
   }
 
-  return JSON.parse(stringObject);
+  return JSON.parse(stringObject) as T;
 }

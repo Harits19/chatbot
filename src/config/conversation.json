@@ -73,7 +73,7 @@
         "method": "GET",
         "url": "https://reqres.in/api/users/2"
       },
-      "message": "This message data from API request."
+      "message": "Email received {{data.data.email}}"
 
     }
   ]

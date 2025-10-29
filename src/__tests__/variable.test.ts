@@ -1,4 +1,4 @@
-import { replaceObject } from '../variable';
+import { replaceObject } from '../services/variable';
 
 describe('replaceObject', () => {
   test('replaces string and number placeholders', () => {
