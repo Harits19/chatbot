@@ -17,9 +17,9 @@ export type Step = {
     document?: string;
   };
 };
-export type Conversation = { steps: Step[] };
+export type Conversation = { steps: Step[]; trigger: string[]; id: string };
 // Read conversation flow from JSON
-export const conversationConfig: Conversation = JSON.parse(
+export const conversationConfig: Conversation[] = JSON.parse(
   fs.readFileSync(
     path.join(__dirname, "..", "config", "conversation.json"),
     "utf8"
@@ -27,12 +27,23 @@ export const conversationConfig: Conversation = JSON.parse(
 );
 
 console.log(
-  `Loaded conversation config with ${conversationConfig.steps.length} steps`
+  `Loaded conversation config with ${conversationConfig.length} chatbot`
 );
 
+export function findConfigByTrigger(trigger: string) {
+  return conversationConfig.find((item) => item.trigger.includes(trigger));
+}
+
+export function findConfigById(id: string) {
+  return conversationConfig.find((item) => item.id === id);
+}
+
 // Helper function to find step by ID
-export function findStep(stepId: string): Step | undefined {
-  const found = conversationConfig.steps.find((step) => step.id === stepId);
+export function findStep(
+  stepId: string,
+  conversation: Conversation
+): Step | undefined {
+  const found = conversation.steps.find((step) => step.id === stepId);
   console.log(`findStep: '${stepId}' -> ${found ? "found" : "not found"}`);
   return found;
 }
@@ -71,7 +82,11 @@ async function handleAction(chatId: number, nextStep: Step) {
   }
 }
 
-export async function handleNextStep(chatId: number, nextStep: Step) {
+export async function handleNextStep(
+  chatId: number,
+  nextStep: Step,
+  conversation: Conversation
+) {
   const { photo, video, document } = nextStep.header ?? {};
 
   console.log(`handleNextStep: chat=${chatId} nextStepId='${nextStep.id}'`);
@@ -90,7 +105,10 @@ export async function handleNextStep(chatId: number, nextStep: Step) {
     nextStep = result;
   }
 
-  userStates.set(chatId, { currentStep: nextStep.id });
+  userStates.set(chatId, {
+    currentStep: nextStep.id,
+    chatbotId: conversation.id,
+  });
   console.log(
     `handleNextStep: userStates updated for chat=${chatId} -> '${nextStep.id}'`
   );
@@ -137,4 +155,37 @@ export async function handleNextStep(chatId: number, nextStep: Step) {
   } catch (err) {
     console.error("handleNextStep: failed to send message", err);
   }
+}
+
+export async function handleEmptySession(chatId: number, text: string) {
+  console.log(
+    `No conversation state for chat=${chatId}. Start new conversation.`
+  );
+  const conversation = findConfigByTrigger(text);
+  if (!conversation) {
+    console.warn(
+      `No conversation config found for trigger='${text}' chat=${chatId}`
+    );
+    await bot.sendMessage(chatId, "No conversation config found");
+    return;
+  }
+
+  const newUserState = {
+    chatbotId: conversation.id,
+    currentStep: "start",
+  };
+
+  const nextStep = findStep(newUserState.currentStep, conversation);
+
+  if (!nextStep) {
+    console.error("step with id start not found");
+    return;
+  }
+
+  userStates.set(chatId, newUserState);
+  console.log(
+    `Saved new userState for chat=${chatId} chatbotId='${conversation.id}' currentStep='start'`
+  );
+
+  await handleNextStep(chatId, nextStep, conversation);
 }

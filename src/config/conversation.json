@@ -1,81 +1,115 @@
-{
-  "steps": [
-    {
-      "id": "start",
-      "message": "Message with photo header",
-      "header": {
-        "photo": "https://camo.githubusercontent.com/3cae61090608b8cbd681f5825ca5ac76af8d8d3ee12024926d51c5480aef5d6c/68747470733a2f2f796176757a63656c696b65722e6769746875622e696f2f73616d706c652d696d616765732f696d6167652d313032312e6a7067"
+[
+  {
+    "id": "1",
+    "trigger": ["trigger1"],
+    "steps": [
+      {
+        "id": "start",
+        "message": "Response from trigger1 with photo header",
+        "header": {
+          "photo": "https://camo.githubusercontent.com/3cae61090608b8cbd681f5825ca5ac76af8d8d3ee12024926d51c5480aef5d6c/68747470733a2f2f796176757a63656c696b65722e6769746875622e696f2f73616d706c652d696d616765732f696d6167652d313032312e6a7067"
+        },
+        "options": [
+          {
+            "text": "Header Video",
+            "nextStep": "header-video"
+          },
+          {
+            "text": "Header Document",
+            "nextStep": "header-document"
+          },
+          {
+            "text": "Header Photo",
+            "nextStep": "start"
+          },
+          {
+            "text": "Message with action",
+            "nextStep": "action-message"
+          }
+        ]
       },
-      "options": [
-        {
-          "text": "Header Video",
-          "nextStep": "header-video"
+      {
+        "id": "header-video",
+        "message": "Message with video header",
+        "header": {
+          "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
         },
-        {
-          "text": "Header Document",
-          "nextStep": "header-document"
-        },
-        {
-          "text": "Header Photo",
-          "nextStep": "start"
-        },
-        {
-          "text": "Message with action",
-          "nextStep": "action-message"
-        }
-      ]
-    },
-    {
-      "id": "header-video",
-      "message": "Message with video header",
-      "header": {
-        "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        "options": [
+          {
+            "text": "Header Video",
+            "nextStep": "header-video"
+          },
+          {
+            "text": "Header Document",
+            "nextStep": "header-document"
+          },
+          {
+            "text": "Header Photo",
+            "nextStep": "start"
+          }
+        ]
       },
-      "options": [
-        {
-          "text": "Header Video",
-          "nextStep": "header-video"
+      {
+        "id": "header-document",
+        "message": "Message with document header",
+        "header": {
+          "document": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
         },
-        {
-          "text": "Header Document",
-          "nextStep": "header-document"
-        },
-        {
-          "text": "Header Photo",
-          "nextStep": "start"
-        }
-      ]
-    },
-    {
-      "id": "header-document",
-      "message": "Message with document header",
-      "header": {
-        "document": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+        "options": [
+          {
+            "text": "Header Video",
+            "nextStep": "header-video"
+          },
+          {
+            "text": "Header Document",
+            "nextStep": "header-document"
+          },
+          {
+            "text": "Header Photo",
+            "nextStep": "start"
+          }
+        ]
       },
-      "options": [
-        {
-          "text": "Header Video",
-          "nextStep": "header-video"
+      {
+        "id": "action-message",
+        "action": {
+          "method": "GET",
+          "url": "https://reqres.in/api/users/2"
         },
-        {
-          "text": "Header Document",
-          "nextStep": "header-document"
+        "message": "Email received {{data.data.email}}",
+        "nextStep": "start"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "trigger": ["trigger2"],
+    "steps": [
+      {
+        "id": "start",
+        "message": "Response from trigger2 with photo header",
+        "header": {
+          "photo": "https://camo.githubusercontent.com/3cae61090608b8cbd681f5825ca5ac76af8d8d3ee12024926d51c5480aef5d6c/68747470733a2f2f796176757a63656c696b65722e6769746875622e696f2f73616d706c652d696d616765732f696d6167652d313032312e6a7067"
         },
-        {
-          "text": "Header Photo",
-          "nextStep": "start"
-        }
-      ]
-    },
-    {
-      "id": "action-message",
-      "action": {
-        "method": "GET",
-        "url": "https://reqres.in/api/users/2"
-      },
-      "message": "Email received {{data.data.email}}",
-      "nextStep": "start"
-
-    }
-  ]
-}
+        "options": [
+          {
+            "text": "Header Video",
+            "nextStep": "header-video"
+          },
+          {
+            "text": "Header Document",
+            "nextStep": "header-document"
+          },
+          {
+            "text": "Header Photo",
+            "nextStep": "start"
+          },
+          {
+            "text": "Message with action",
+            "nextStep": "action-message"
+          }
+        ]
+      }
+    ]
+  }
+]
