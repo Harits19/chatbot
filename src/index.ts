@@ -2,6 +2,7 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+import axios, { AxiosRequestConfig } from "axios";
 
 // Load environment variables
 dotenv.config();
@@ -11,6 +12,7 @@ type Step = {
   id: string;
   message: string;
   options: Option[];
+  action: AxiosRequestConfig;
   header?: {
     photo?: string;
     video?: string;
@@ -52,6 +54,31 @@ function createKeyboard(options: Option[]) {
   };
 }
 
+async function handleNextStep(chatId: number, nextStep: Step) {
+  const { photo, video, document } = nextStep.header ?? {};
+  const action = nextStep.action;
+
+  try {
+    const response = await axios(action);
+  } catch (error) {}
+
+  userStates.set(chatId, { currentStep: nextStep.id });
+
+  if (photo) {
+    await bot.sendPhoto(chatId, photo);
+  }
+
+  if (video) {
+    await bot.sendVideo(chatId, video);
+  }
+
+  if (document) {
+    await bot.sendDocument(chatId, document);
+  }
+  
+  await bot.sendMessage(chatId, nextStep.message, createKeyboard(nextStep.options));
+}
+
 // Handle /start command
 bot.onText(/\/start/, (msg: Message) => {
   const chatId = msg.chat.id;
@@ -83,27 +110,7 @@ bot.on("message", async (msg: Message) => {
     const nextStep = findStep(selectedOption.nextStep);
 
     if (nextStep) {
-      const { photo, video, document } = nextStep.header ?? {};
-
-      userStates.set(chatId, { currentStep: nextStep.id });
-
-      if (photo) {
-        await bot.sendPhoto(chatId, photo);
-      }
-
-      if (video) {
-        await bot.sendVideo(chatId, video);
-      }
-
-      if (document) {
-        await bot.sendDocument(chatId, document);
-      }
-
-      bot.sendMessage(
-        chatId,
-        nextStep.message,
-        createKeyboard(nextStep.options)
-      );
+      await handleNextStep(chatId, nextStep);
     } else {
       bot.sendMessage(
         chatId,

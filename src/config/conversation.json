@@ -18,6 +18,10 @@
         {
           "text": "Header Photo",
           "nextStep": "start"
+        },
+        {
+          "text": "Message with action",
+          "nextStep": "action-message"
         }
       ]
     },
@@ -64,66 +68,13 @@
       ]
     },
     {
-      "id": "services",
-      "message": "We offer the following services:",
-      "header": {
-        "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+      "id": "action-message",
+      "action": {
+        "method": "GET",
+        "url": "https://reqres.in/api/users/2"
       },
-      "options": [
-        {
-          "text": "Web Development",
-          "nextStep": "web_dev"
-        },
-        {
-          "text": "Mobile Development",
-          "nextStep": "mobile_dev"
-        },
-        {
-          "text": "Back to start",
-          "nextStep": "start"
-        }
-      ]
-    },
-    {
-      "id": "support",
-      "header": {
-        "document": ""
-      },
-      "message": "Please contact us at support@example.com or call +1234567890",
-      "options": [
-        {
-          "text": "Back to start",
-          "nextStep": "start"
-        }
-      ]
-    },
-    {
-      "id": "web_dev",
-      "message": "We specialize in modern web development using React, Node.js, and other cutting-edge technologies.",
-      "options": [
-        {
-          "text": "Back to services",
-          "nextStep": "services"
-        },
-        {
-          "text": "Back to start",
-          "nextStep": "start"
-        }
-      ]
-    },
-    {
-      "id": "mobile_dev",
-      "message": "We create native and cross-platform mobile applications using React Native and Flutter.",
-      "options": [
-        {
-          "text": "Back to services",
-          "nextStep": "services"
-        },
-        {
-          "text": "Back to start",
-          "nextStep": "start"
-        }
-      ]
+      "message": "This message data from API request."
+
     }
   ]
 }
