@@ -11,6 +11,7 @@ export type Step = {
   options?: Option[];
   nextStep?: string;
   action: AxiosRequestConfig;
+  endJourney?: boolean;
   header?: {
     photo?: string;
     video?: string;
@@ -68,17 +69,10 @@ async function handleAction(chatId: number, nextStep: Step) {
     return nextStep;
   } catch (error) {
     console.error("handleAction: error", error);
-    try {
-      await bot.sendMessage(
-        chatId,
-        "Sorry we have trouble responding your message"
-      );
-    } catch (sendErr) {
-      console.error(
-        "handleAction: failed to send error message to user",
-        sendErr
-      );
-    }
+    await bot.sendMessage(
+      chatId,
+      "Sorry we have trouble responding your message"
+    );
   }
 }
 
@@ -115,45 +109,33 @@ export async function handleNextStep(
 
   if (photo) {
     console.log(`handleNextStep: sending photo to chat=${chatId} -> ${photo}`);
-    try {
-      await bot.sendPhoto(chatId, photo);
-      console.log("handleNextStep: photo sent");
-    } catch (err) {
-      console.error("handleNextStep: failed to send photo", err);
-    }
+    await bot.sendPhoto(chatId, photo);
+    console.log("handleNextStep: photo sent");
   }
 
   if (video) {
     console.log(`handleNextStep: sending video to chat=${chatId} -> ${video}`);
-    try {
-      await bot.sendVideo(chatId, video);
-      console.log("handleNextStep: video sent");
-    } catch (err) {
-      console.error("handleNextStep: failed to send video", err);
-    }
+    await bot.sendVideo(chatId, video);
+    console.log("handleNextStep: video sent");
   }
 
   if (document) {
     console.log(
       `handleNextStep: sending document to chat=${chatId} -> ${document}`
     );
-    try {
-      await bot.sendDocument(chatId, document);
-      console.log("handleNextStep: document sent");
-    } catch (err) {
-      console.error("handleNextStep: failed to send document", err);
-    }
+    await bot.sendDocument(chatId, document);
+    console.log("handleNextStep: document sent");
   }
 
-  try {
-    await bot.sendMessage(
-      chatId,
-      nextStep.message,
-      createKeyboard(nextStep.options)
-    );
-    console.log(`handleNextStep: message sent to chat=${chatId}`);
-  } catch (err) {
-    console.error("handleNextStep: failed to send message", err);
+  await bot.sendMessage(
+    chatId,
+    nextStep.message,
+    createKeyboard(nextStep.options)
+  );
+  console.log(`handleNextStep: message sent to chat=${chatId}`);
+
+  if (nextStep.endJourney === true) {
+    userStates.delete(chatId);
   }
 }
 
