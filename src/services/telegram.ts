@@ -1,4 +1,4 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot, { SendMessageOptions } from "node-telegram-bot-api";
 import { Option } from "./chatbot";
 import dotenv from "dotenv";
 // Load environment variables
@@ -19,11 +19,13 @@ export const userStates = new Map<number, UserState>();
 export const bot = new TelegramBot(token, { polling: true });
 
 // Helper function to create keyboard markup from options
-export function createKeyboard(options?: Option[]) {
+export function createKeyboard(
+  options?: Option[]
+): SendMessageOptions | undefined {
   if (!options) return undefined;
   return {
     reply_markup: {
-      keyboard: options.map((option) => [{ text: option.text }]),
+      inline_keyboard: options.map((option) => [{ text: option.text, callback_data: option.payload }]),
       resize_keyboard: true,
       one_time_keyboard: false,
     },

@@ -12,18 +12,22 @@
         "options": [
           {
             "text": "Header Video",
+            "payload": "header-video",
             "nextStep": "header-video"
           },
           {
             "text": "Header Document",
+            "payload": "header-document",
             "nextStep": "header-document"
           },
           {
             "text": "Header Photo",
+            "payload": "header-photo",
             "nextStep": "start"
           },
           {
             "text": "Message with action",
+            "payload": "action-message",
             "nextStep": "action-message"
           }
         ]

@@ -4,7 +4,7 @@ import fs from "fs";
 import { bot, createKeyboard, userStates } from "./telegram";
 import { replaceObject } from "./variable";
 
-export type Option = { text: string; nextStep: string };
+export type Option = { text: string; nextStep: string; payload: string };
 export type Step = {
   id: string;
   message: string;
